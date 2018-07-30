@@ -1,5 +1,3 @@
-from random import shuffle
-
 class Card():
 	"""docstring for Card"""
 	def __init__(self, color, suit, text, number, value):
@@ -34,9 +32,3 @@ def create_deck():
 	create_suit_of_cards("Black", "Spades", deck)
 
 	return deck
-
-deck = create_deck()
-
-shuffle(deck)
-
-print(deck[51])
