@@ -22,6 +22,9 @@ class Player():
 				bet = self.check_chips_availability(quantity)
 				if(bet):
 					break
+				else:
+					print(colorama.Fore.RED, "You can't bet 0 chips")
+					print(colorama.Style.RESET_ALL)
 		return quantity
 
 	def check_chips_availability(self, quantity):

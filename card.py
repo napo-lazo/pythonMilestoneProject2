@@ -1,5 +1,9 @@
 class Card():
+
 	"""docstring for Card"""
+
+	facing_up = False
+	
 	def __init__(self, color, suit, text, number, value):
 		self.color = color
 		self.suit = suit
@@ -8,7 +12,10 @@ class Card():
 		self.value = value
 
 	def __str__(self):
-		return f"Color: {self.color}\nSuit: {self.suit}\nText: {self.text}\nNumber: {self.number}\nValue: {self.value}"
+		if(self.facing_up):
+			return f"Color: {self.color}\nSuit: {self.suit}\nText: {self.text}\nNumber: {self.number}\nValue: {self.value}"
+		else:
+			return "Card is face down"
 
 def create_suit_of_cards(color, suit, deck):
 	specialchars = ["A", "J", "Q", "K"]

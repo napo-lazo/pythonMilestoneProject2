@@ -9,7 +9,19 @@ if __name__ == '__main__':
 	pot = 0
 
 	while playing:
+
 		dealer.shuffle_deck()
 		pot += player.set_bet()
 		print(f"Current pot: {pot}")
+
+		dealer.deal_card_face_up(player.hand)
+		dealer.deal_card_face_up(dealer.hand)
+		dealer.deal_card_face_up(player.hand)
+		dealer.deal_card_face_down(dealer.hand)
+
+		# TO DO:
+		# player's turn
+		# dealer's turn
+		# check winner
+
 		break
