@@ -19,7 +19,7 @@ class Player():
 				print(colorama.Fore.RED, "That is not a number, please enter a number")
 				print(colorama.Style.RESET_ALL)
 			else:
-				bet = self.check_chips_availability(quantity)
+				bet = self.__check_chips_availability(quantity)
 				if(bet):
 					break
 				else:
@@ -27,7 +27,7 @@ class Player():
 					print(colorama.Style.RESET_ALL)
 		return quantity
 
-	def check_chips_availability(self, quantity):
+	def __check_chips_availability(self, quantity):
 		while True:
 			if(self.chips - quantity > 0):
 				self.chips = self.chips - quantity
@@ -37,3 +37,10 @@ class Player():
 				print(colorama.Fore.RED, "You don't have enough chips")
 				print(colorama.Style.RESET_ALL)
 				return
+
+	def print_hand(self):
+
+		print("\n")
+		for card in self.hand:
+			print(card)
+			print("\n")
