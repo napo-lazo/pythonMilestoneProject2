@@ -1,6 +1,6 @@
 class Card():
 
-    visible = False
+    isVisible = False
 
     def __init__(self, number, color, suit):
         self.number = number
@@ -8,7 +8,7 @@ class Card():
         self.suit = suit
 
     def __str__(self):
-        if not self.visible:
-            return "Number: ???\nColor: ???\nSuit: ???\n"
+        if not self.isVisible:
+            return "Number: ???\nColor: ???\nSuit: ???"
         else:
-            return f"Number: {self.number}\nColor: {self.color}\nSuit: {self.suit}\n"
+            return f"Number: {self.number}\nColor: {self.color}\nSuit: {self.suit}"
