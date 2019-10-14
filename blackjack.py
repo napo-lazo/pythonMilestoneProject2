@@ -26,13 +26,12 @@ def initialSetup(players, deck):
     for _ in range(0,100):
         deck.shuffleDeck()
     dealFaceUp(players[0], deck)
-    dealFaceDown(players[1], deck)
-    dealFaceUp(players[0], deck)
     dealFaceUp(players[1], deck)
+    dealFaceUp(players[0], deck)
+    dealFaceDown(players[1], deck)
     return pot
 
 def getCardValue(card):
-
     if(not card.isVisible):
         return 0
 
@@ -47,11 +46,9 @@ def getCardValue(card):
         return value
 
 def checkHandValue(hand):
-    cardValues = []
     totalValue = 0
     
-    for card in hand:
-        cardValues.append(getCardValue(card))
+    cardValues = list (map(getCardValue, hand))
     
     cardValues.sort()
     for value in cardValues:
@@ -63,22 +60,106 @@ def checkHandValue(hand):
     return totalValue
 
 def viewTable(players):
-    
     for player in players:
         print("------------------------------------------")
         print(player.username)
         for card in player.hand:
             print("------------------------------------------")
             print(card)
+
+        player.handValue = checkHandValue(player.hand)
         print("------------------------------------------")
-        print(f"Total value: {checkHandValue(player.hand)}")
+        if player.handValue > 21:
+            print(f"Total value: {player.handValue} - BUSTED")
+            player.isBusted = True
+        else:
+            print(f"Total value: {player.handValue}")
+        print("------------------------------------------") 
+
+def round(players, deck, pot):
+
+    isTurnOver = False
+
+    while not isTurnOver:
+        viewTable(players)
+        if players[0].handValue < 21: 
+            isTurnOver = playerTurn(players[0], deck)
+        else:
+           isTurnOver = True 
+
+    if players[0].handValue < 21 and not players[0].isBusted:
+        cpuwins = cpuTurn(players[0], players[1], deck)
+    elif players[0].handValue == 21:
+        cpuwins = False
+    else:
+        cpuwins = True
+
+    viewTable(players)
+    if not cpuwins:
+        print("------------------------------------------")
+        print(f"PLAYER WINS, you get {pot * 2}")
+        print("------------------------------------------")
+        players[0].bankroll += pot * 2
+    else:
+        print("------------------------------------------")
+        print("CPU WINS")
         print("------------------------------------------")
 
-if __name__ == "__main__":
+def playerTurn(player, deck):
+        while True:
+            answer = input("Hit or leave?\n")
+            if answer.lower() == "hit" or answer.lower() == "h":
+                dealFaceUp(player, deck)
+                return False
+            elif answer.lower() == "leave" or answer.lower() == "l":
+                return True
+
+def cpuTurn(player, cpu, deck):
+    cpu.hand[-1].isVisible = True
+
+    while True:
+        cpu.handValue = checkHandValue(cpu.hand)
+        if cpu.handValue > 21:
+            return False
+        elif cpu.handValue > player.handValue:
+            return True
+        else:
+            dealFaceUp(cpu, deck)
+
+
+
+def endOfRound(players, deck):
+    for player in players:
+        size = len(player.hand)
+        for _ in range(0, size):
+            player.hand[-1].isVisible = False
+            deck.cards.append(player.hand.pop())
+        player.isBusted = False
+        player.handValue = 0
+    deck.shuffleDeck()
+
+def blackjackMain():
     players = [Player("Player"), Player("Cpu")]
     deck = Deck()
+    continuePlaying = True
 
-    pot = initialSetup(players, deck)
-    viewTable(players)
-    while False:
-        pass
+    while players[0].bankroll > 0 and continuePlaying:
+        pot = initialSetup(players, deck)
+        round(players, deck, pot)
+        endOfRound(players, deck)
+
+        if(players[0].bankroll > 0):
+            while True:
+                answer = input("Do you want to play another round?\n")
+                if answer.lower() == "no" or answer == "n":
+                    continuePlaying = False
+                    break
+                elif answer.lower() == "yes" or answer == "y":
+                    break
+        else:
+            print("You ran out of chips")
+            print("------------------------------------------")
+
+
+if __name__ == "__main__":
+    blackjackMain()

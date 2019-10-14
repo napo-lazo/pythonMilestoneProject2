@@ -1,9 +1,13 @@
 class Player():
 
+    bankroll = 500
+    handValue = 0
+    isBusted = False
+
     def __init__(self, username):
         self.hand = []
-        self.bankroll = 500
         self.username = username
+        
     
     def viewHand(self):
         print("-----------------------------------")
